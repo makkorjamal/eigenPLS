@@ -57,6 +57,7 @@ void PLS::train(
 	{
 		while (1)
 		{
+			//maximizing infomation content in from X and Y
 			w = X.transpose() * u;
 			w = w / w.norm();
 			t = X * w; // latent vector in X
@@ -136,23 +137,6 @@ MatrixXf PLS::pseudoMat(MatrixXf P)
 	return pseudoM;
 }
 
-//MatrixXf PLS::randomMat( int rows, int cols)
-//{
-//	MatrixXf mat;
-//	random_device rd;  // Obtain a random number from hardware
-//	mt19937 eng(rd()); // Seed the generator
-//	uniform_real_distribution<> distr(0.0, 1.0); // Define the range
-//
-//	for( int i = 0; i < rows; i++)
-//	{
-//		for(int j = 0; j < cols; j++)
-//		{
-//			mat(i,j) = distr(eng);
-//		}
-//	}
-//	return mat;
-//}
-//
 
 const MatrixXf &PLS::getB() const
 {

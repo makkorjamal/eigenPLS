@@ -1,6 +1,6 @@
 CXX = g++
 
-CXXFLAGS =-I/usr/local/include/eigen3 -std=c++14
+CXXFLAGS =-I/usr/local/include/eigen3 -Iinclude -std=c++14
 
 SRCS = src/main.cpp src/PLS.cpp
 HEADERS = include/PLS.hpp

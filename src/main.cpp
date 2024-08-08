@@ -15,11 +15,7 @@ int main()
          13.0, 14.0, 15.0;
 
     Eigen::MatrixXf Y(5, 1);
-    //Y << 0.1,
-    //     8.1,
-    //     6.1,
-    //     3.1,
-    //     3.1;
+    // generate a matrix that Y that have linear dependence on X
     for (int i = 0; i < 5; ++i) {
         Y(i, 0) = 2.0 * X(i, 0) + 3.0 * X(i, 1) - 1.0 * X(i, 2) + (static_cast<float>(rand()) / RAND_MAX - 0.5); // Linear combination with noise
     }

@@ -1,4 +1,8 @@
-# PLS
+# eigenPLS
+## A Simplified barebone Partial Least squares library
+
+
+
 C++ PLS using eigen library
 The algorithm was described by Herve Abdi
 Python implementation by Avinash Kak [python implementation](https://engineering.purdue.edu/kak/distPLS/)

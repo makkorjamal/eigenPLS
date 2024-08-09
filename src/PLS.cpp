@@ -1,12 +1,10 @@
 #include <PLS.hpp>
 #include <iostream>
-#include <random>
-#include <math.h>
-#include <cstdio>
 
-using namespace std;
-using Eigen::MatrixXf;
-using Eigen::VectorXf;
+using  std::endl;
+using  std::cerr;
+using Eigen::MatrixXd;
+using Eigen::VectorXd;
 
 PLS::PLS( )
 {
@@ -15,9 +13,9 @@ PLS::PLS( )
 
 
 PLS::PLS(
-	const MatrixXf &B,
-	const MatrixXf &meanX,
-	const MatrixXf &meanY ) : B(B), mean0X(meanX), mean0Y(meanY)
+	const MatrixXd &B,
+	const MatrixXd &meanX,
+	const MatrixXd &meanY ) : B(B), mean0X(meanX), mean0Y(meanY)
 {
 	// nothing to do
 }
@@ -28,9 +26,9 @@ PLS::~PLS()
 }
 
 void PLS::train(
-	const MatrixXf &Xdata,
-	const MatrixXf &Ydata,
-	float epsilon )
+	const MatrixXd &Xdata,
+	const MatrixXd &Ydata,
+	double epsilon )
 {
 	if (Xdata.rows() != Ydata.rows()){
 
@@ -38,7 +36,7 @@ void PLS::train(
 		return;
 	}
 
-	MatrixXf X, Y;
+	MatrixXd X, Y;
 	X = Xdata;
 	mean0X = X.colwise().mean();
 	Y = Ydata;
@@ -50,9 +48,9 @@ void PLS::train(
 	for (int i = 0; i < Y.rows(); ++i) 
 		Y.row(i) = Y.row(i) - mean0Y;
 
-        MatrixXf T, U, W, C, P, Q, Bdiag;
-        VectorXf t, w, u_old,e, c, p, q, b;
-	VectorXf u = VectorXf::Random(X.rows());
+        MatrixXd T, U, W, C, P, Q, Bdiag;
+        VectorXd t, w, u_old,e, c, p, q, b;
+	VectorXd u = VectorXd::Random(X.rows());
 	while (1)
 	{
 		while (1)
@@ -67,54 +65,24 @@ void PLS::train(
 			u_old = u;
 			u = Y * c; // latent vector in Y
 			e = u- u_old; // try to minimise the error
-			float error = e.norm();
+			double error = e.norm();
 			if (error < epsilon) break;
 		}
 		b = t.transpose() * u;
 		assert(b.cols() == 1 && b.rows() == 1);
-#if (0)
-		if (T.cols() == 0)
-			T = t;
-		else
-			T.conservativeResize(T.rows(), T.cols() + 1); 
-			T.col(T.cols() - 1) = t; 
-
-		if (U.cols() == 0)
-			U = u;
-		else
-			U.conservativeResize(U.rows(), U.cols() + 1); 
-			U.col(U.cols() - 1) = u; 
-
-		if (W.cols() == 0)
-			W = w;
-		else
-			W.conservativeResize(W.rows(), W.cols() + 1); 
-			W.col(W.cols() - 1) = w; 
-#endif
 		if (C.cols() == 0)
 			C = c;
 		else
 			C.conservativeResize(C.rows(), C.cols() + 1); 
 			C.col(C.cols() - 1) = c; 
 
-		float temp = t.norm();
+		double temp = t.norm();
 		p = X.transpose() * t / (temp * temp);
-#if (0)
-		temp = u.norm();
-		q = Y.transpose() * u / (temp * temp);
-#endif
 		if (P.cols() == 0)
 			P = p;
 		else
 			P.conservativeResize(P.rows(), P.cols() + 1); 
 			P.col(P.cols() - 1) = p; 
-#if (0)
-		if (Q.cols() == 0)
-			Q = q;
-		else
-			Q.conservativeResize(Q.rows(), Q.cols() + 1); 
-			Q.col(Q.cols() - 1) = q; 
-#endif
 		if (Bdiag.cols() == 0)
 			Bdiag = b;
 		else
@@ -130,37 +98,37 @@ void PLS::train(
 	B = B * Bdiag;
 	B = B * C.transpose();
 }
-MatrixXf PLS::pseudoMat(MatrixXf P)
+MatrixXd PLS::pseudoMat(MatrixXd P)
 {
-	MatrixXf P_transpose = P.transpose();
-	MatrixXf pseudoM = P_transpose.completeOrthogonalDecomposition().pseudoInverse();
+	MatrixXd P_transpose = P.transpose();
+	MatrixXd pseudoM = P_transpose.completeOrthogonalDecomposition().pseudoInverse();
 	return pseudoM;
 }
 
 
-const MatrixXf &PLS::getB() const
+const MatrixXd &PLS::getB() const
 {
 	return this->B;
 }
 
 
-const MatrixXf &PLS::getMeanX() const
+const MatrixXd &PLS::getMeanX() const
 {
 	return this->mean0X;
 }
 
 
-const MatrixXf &PLS::getMeanY() const
+const MatrixXd &PLS::getMeanY() const
 {
 	return this->mean0Y;
 }
 
 
-MatrixXf PLS::predict(
-	const MatrixXf &v ) const
+MatrixXd PLS::predict(
+	const MatrixXd &v ) const
 {
-	MatrixXf temp;
-	MatrixXf result = MatrixXf::Zero(v.rows(),B.cols());	
+	MatrixXd temp;
+	MatrixXd result = MatrixXd::Zero(v.rows(),B.cols());	
 	temp = v;
 
 	for (int i = 0; i < temp.rows(); ++i)

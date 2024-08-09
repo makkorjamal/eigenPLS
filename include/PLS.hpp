@@ -3,7 +3,7 @@
 
 
 #include <Eigen/Dense>
-using Eigen::MatrixXf;
+using Eigen::MatrixXd;
 
 
 /**
@@ -17,32 +17,32 @@ using Eigen::MatrixXf;
 class PLS
 {
 	private:
-		MatrixXf B, mean0X, mean0Y;
+		MatrixXd B, mean0X, mean0Y;
 		inline void display(
 			const char *name,
-			const MatrixXf &value );
+			const MatrixXd &value );
 
 	public:
 		PLS( );
-		PLS( const MatrixXf &B, const MatrixXf &meanX, const MatrixXf &meanY );
+		PLS( const MatrixXd &B, const MatrixXd &meanX, const MatrixXd &meanY );
 		~PLS();
 
 		void train(
-			const MatrixXf &Xdata,
-			const MatrixXf &Ydata,
-			float epsilon = 0.0001 );
+			const MatrixXd &Xdata,
+			const MatrixXd &Ydata,
+			double epsilon = 0.0001 );
 
-		const MatrixXf &getB() const;
+		const MatrixXd &getB() const;
 
-		const MatrixXf &getMeanX() const;
+		const MatrixXd &getMeanX() const;
 
-		const MatrixXf &getMeanY() const;
+		const MatrixXd &getMeanY() const;
 
-		MatrixXf predict(
-			const MatrixXf &v ) const;
+		MatrixXd predict(
+			const MatrixXd &v ) const;
 
-		MatrixXf pseudoMat(
-				MatrixXf P);
+		MatrixXd pseudoMat(
+				MatrixXd P);
 
 };
 
